@@ -1,0 +1,14 @@
+osx_image: xcode10.2
+language: objective-c
+cache:
+  bundler: true
+  directories:
+  - Carthage
+install:
+- carthage bootstrap --platform ios --cache-builds
+before_script:
+- xcrun agvtool new-version -all "$TRAVIS_BUILD_NUMBER"
+script:
+- xcodebuild build-for-testing test-without-building -workspace AffineUtils.xcworkspace -scheme AffineUtils-iOS -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6s" -configuration Release ENABLE_TESTABILITY=YES GCC_GENERATE_DEBUGGING_SYMBOLS=NO RUN_CLANG_STATIC_ANALYZER=NO | xcpretty
+- carthage build --no-skip-current
+
